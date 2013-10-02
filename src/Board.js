@@ -150,9 +150,9 @@
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow){
       var n = this.attributes.n;
-      var i = minorDiagonalColumnIndexAtFirstRow;
-      var c_i = n - 1 - Math.max(0, i);
-      var r_i = Math.max(0, -i);
+      var i = minorDiagonalColumnIndexAtFirstRow - (n - 1);
+      var c_i = n - 1 - Math.max(0, -i);
+      var r_i = Math.max(0, i);
       var pieces = 0;
       for (var j = 0; j < n - Math.abs(i); j++) {
         pieces += this.attributes[r_i + j][c_i - j];
@@ -162,8 +162,9 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function(){
+      debugger;
       var n = this.attributes.n;
-      for(var i = 2 - n; i <= n -2; i ++) {
+      for(var i = n + 1 ; i >= 2 * n - 1; i --) {
         if ( this.hasMinorDiagonalConflictAt(i) ) {return true;}
       }
       return false; // fixme
