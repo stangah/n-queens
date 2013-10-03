@@ -34,34 +34,37 @@ window.findNRooksSolution = function(n){
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n){
+  var solutionCount = 0;
   if (n === 0){
     return 1;
-  }
-  var board = new Board(makeEmptyMatrix(n));
-  var solutionCount = 0;
-  var recurse = function(r) {
-    r = r || 0;
-    for (var c = 0; c < n; c ++) {
-      board.togglePiece(r, c);
-      if (board.hasAnyRookConflictOn(r, c)) {
-        board.togglePiece(r, c);
+  };
+  var recurse = function(board) {
+    board = board || [];
+    if (board.length === n) {
+      solutionCount ++;
+      return;
+    }
+    for (var i = 0; i < n; i++) {
+      var checkBoard = board.concat(i);
+      if (!rookBoardConflict(checkBoard)) {
+        recurse(checkBoard);
       } else {
-        if (r === n - 1) {
-          solutionCount ++;
-          board.togglePiece(r, c);
-          return;
-        }
-        recurse(r+1);
-        board.togglePiece(r, c);
+        continue;
       }
     }
-    // }
-  };
+  }
   recurse();
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
 };
 
+var rookBoardConflict = function(board) {
+  if (_(board).uniq().length !== board.length) {
+    return true;
+  }
+
+  return false;
+}
 
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
@@ -87,39 +90,45 @@ window.findNQueensSolution = function(n){
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n){
+  var solutionCount = 0;
   if (n === 0){
     return 1;
-  }
-  var board = new Board(makeEmptyMatrix(n));
-  var solutionCount = 0;
-  var recurse = function(r) {
-    r = r || 0;
-    // c = c || 0;
-    //Create solutions and increment solutionCount
-    // if (rooks === n && !board.hasAnyRooksConflicts()){
-    //   solutionCount ++;
-    // }
-  // for (i = r; i < n; i ++) {
-    for (var c = 0; c < n; c ++) {
-      board.togglePiece(r, c);
-      if (board.hasAnyQueenConflictsOn(r, c)) {
-        board.togglePiece(r, c);
+  };
+  var recurse = function(board) {
+    board = board || [];
+    if (board.length === n) {
+      solutionCount ++;
+      return;
+    }
+    for (var i = 0; i < n; i++) {
+      var checkBoard = board.concat(i);
+      if (!queenBoardConflict(checkBoard)) {
+        recurse(checkBoard);
       } else {
-        if (r === n - 1) {
-          solutionCount ++;
-          board.togglePiece(r, c);
-          return;
-        }
-        recurse(r+1);
-        board.togglePiece(r, c);
+        continue;
       }
     }
-    // }
-  };
+  }
   recurse();
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
 };
+
+var queenBoardConflict = function(board) {
+  if (_(board).uniq().length !== board.length) {
+    return true;
+  }
+
+  for (var i = 0; i < board.length; i ++) {
+    for (var j = i + 1; j < board.length; j++) {
+      if (Math.abs(board[i] - board[j]) === j - i) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
 
 window.makeEmptyMatrix = function(n){
   return _(_.range(n)).map(function(){
