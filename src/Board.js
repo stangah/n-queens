@@ -41,6 +41,10 @@
       return this.hasAnyRowConflicts() || this.hasAnyColConflicts();
     },
 
+    hasAnyRookConflictOn: function(rowIndex, colIndex){
+      return this.hasRowConflictAt(rowIndex) || this.hasColConflictAt(colIndex);
+    },
+
     hasAnyQueenConflictsOn: function(rowIndex, colIndex){
       return (
         this.hasRowConflictAt(rowIndex) ||
