@@ -38,16 +38,23 @@ window.countNRooksSolutions = function(n){
   if (n === 0){
     return 1;
   };
-  var recurse = function(board) {
+  var recurse = function(board, cols) {
     board = board || [];
+    if (!cols) {
+      cols = [];
+      for (i = 0; i < n; i++) {
+        cols.push(i);
+      }
+    }    
     if (board.length === n) {
       solutionCount ++;
       return;
     }
-    for (var i = 0; i < n; i++) {
-      var checkBoard = board.concat(i);
+    for (var i = 0; i < cols.length; i++) {
+      var newCol = cols.slice();
+      var checkBoard = board.concat(newCol.splice(i,1));
       if (!rookBoardConflict(checkBoard)) {
-        recurse(checkBoard);
+        recurse(checkBoard, newCol);
       } else {
         continue;
       }
@@ -59,12 +66,15 @@ window.countNRooksSolutions = function(n){
 };
 
 var rookBoardConflict = function(board) {
-  if (_(board).uniq().length !== board.length) {
-    return true;
+  var seen = {};
+  for (i = 0; i < board.length; i++) {
+    if (seen[board[i]]){
+      return true;
+    } else {
+      seen[board[i]] = true;
+    }
   }
-
-  return false;
-}
+};
 
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
@@ -94,16 +104,25 @@ window.countNQueensSolutions = function(n){
   if (n === 0){
     return 1;
   };
-  var recurse = function(board) {
+  var recurse = function(board, cols) {
     board = board || [];
+    if (!cols) {
+      cols = [];
+      for (i = 0; i < n; i++) {
+        cols.push(i);
+      }
+    }
+
     if (board.length === n) {
       solutionCount ++;
       return;
     }
-    for (var i = 0; i < n; i++) {
-      var checkBoard = board.concat(i);
+
+    for (var i = 0; i < cols.length; i++) {
+      var newCols = cols.slice();
+      var checkBoard = board.concat(newCols.splice(i, 1));
       if (!queenBoardConflict(checkBoard)) {
-        recurse(checkBoard);
+        recurse(checkBoard, newCols);
       } else {
         continue;
       }
@@ -115,8 +134,13 @@ window.countNQueensSolutions = function(n){
 };
 
 var queenBoardConflict = function(board) {
-  if (_(board).uniq().length !== board.length) {
-    return true;
+  var seen = {};
+  for (i = 0; i < board.length; i++) {
+    if (seen[board[i]]){
+      return true;
+    } else {
+      seen[board[i]] = true;
+    }
   }
 
   for (var i = 0; i < board.length; i ++) {
