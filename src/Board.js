@@ -162,9 +162,8 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function(){
-      debugger;
       var n = this.attributes.n;
-      for(var i = n + 1 ; i >= 2 * n - 1; i --) {
+      for(var i = 1 ; i <= 2 * n - 3; i ++) {
         if ( this.hasMinorDiagonalConflictAt(i) ) {return true;}
       }
       return false; // fixme
