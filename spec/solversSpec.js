@@ -47,6 +47,10 @@ describe("solvers", function() {
       });
     });
 
+    it('should be faster than Peter and Brad', function(){
+      countNQueensSolutions(10);
+    });
+
   });
 
 });
